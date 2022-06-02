@@ -67,7 +67,7 @@ else if(process.argv[2] == "-update"){
                     var a = url.split('/')
                     var b = a[4].split('.')
                     result = data.replace(/name2/g, `${b[0]}`);
-                    result = data.replace(/name3/g, `${arr[0]}`);
+                    result = data.replace(/this.name3/g, `this.`+`${arr[0]}`);
                     result = data.replace(/name4/g, `${arr[1]}`);
                     fs.writeFile('temp.sh', result, 'utf8', function (err) {
                        if (err) return console.log(err);
