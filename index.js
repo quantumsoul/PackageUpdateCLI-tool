@@ -59,16 +59,30 @@ else if(process.argv[2] == "-update"){
                 obj.satisfy = false
             }
             if(obj.satisfy == false){
-                const ls = cprocess.exec('temp.sh')
-                ls.stdout.on('data', function(data){
-                    ls.stdin.write('test\n')
+                fs.readFile('temp.sh', 'utf8', function (err,data) {
+                    if (err) {
+                      return console.log(err);
+                    }
+                    var result = data.replace(/name1/g, `${url}`);
                     var a = url.split('/')
                     var b = a[4].split('.')
-                    ls.stdin.write(`${b[0]}\n`)
-                    ls.stdin.write(`${arr[0]}\n`)
-                    ls.stdin.write(`${arr[1]}\n`)
-                    obj.update_pr = data
-                })
+                    result = data.replace(/name2/g, `${b[0]}`);
+                    result = data.replace(/name3/g, `${arr[0]}`);
+                    result = data.replace(/name4/g, `${arr[1]}`);
+                    fs.writeFile('temp.sh', result, 'utf8', function (err) {
+                       if (err) return console.log(err);
+                    });
+                    const ls = cprocess.exec('temp.sh')
+                    ls.stdout.on('data', function(data){
+                        // ls.stdin.write('test\n')
+                        // var a = url.split('/')
+                        // var b = a[4].split('.')
+                        // ls.stdin.write(`${b[0]}\n`)
+                        // ls.stdin.write(`${arr[0]}\n`)
+                        // ls.stdin.write(`${arr[1]}\n`)
+                        obj.update_pr = data
+                    })
+                });
             }
             else{
                 obj.update_pr = ""
