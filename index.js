@@ -4,7 +4,7 @@ const cmp = require('compare-versions')
 const csv = require('csv-parser')
 const csvWriter = require('csv-write-stream')
 const fs = require('fs')
-const cprocess = require('child_process')
+const { execSync } = require("child_process");
 var wr = []
 if(process.argv[2] =="-i"){
     fs.createWriteStream('out.csv')
@@ -59,30 +59,76 @@ else if(process.argv[2] == "-update"){
                 obj.satisfy = false
             }
             if(obj.satisfy == false){
-                fs.readFile('temp.sh', 'utf8', function (err,data) {
-                    if (err) {
-                      return console.log(err);
+                var a = url.split('/')
+                var b = a[4].split('.')
+                var vg = "this." + `${arr[0]}`
+                execSync(`gh repo fork ${url} --clone=true`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log(`error: ${error.message}`);
+                        return;
                     }
-                    var result = data.replace(/name1/g, `${url}`);
-                    var a = url.split('/')
-                    var b = a[4].split('.')
-                    result = data.replace(/name2/g, `${b[0]}`);
-                    result = data.replace(/this.name3/g, `this.`+`${arr[0]}`);
-                    result = data.replace(/name4/g, `${arr[1]}`);
-                    fs.writeFile('temp.sh', result, 'utf8', function (err) {
-                       if (err) return console.log(err);
-                    });
-                    const ls = cprocess.exec('temp.sh')
-                    ls.stdout.on('data', function(data){
-                        // ls.stdin.write('test\n')
-                        // var a = url.split('/')
-                        // var b = a[4].split('.')
-                        // ls.stdin.write(`${b[0]}\n`)
-                        // ls.stdin.write(`${arr[0]}\n`)
-                        // ls.stdin.write(`${arr[1]}\n`)
-                        obj.update_pr = data
-                    })
+                    if (stderr) {
+                        console.log(`stderr: ${stderr}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
                 });
+            
+                execSync(`cd ${b[0]}`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log(`error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        console.log(`stderr: ${stderr}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
+                });
+                execSync(`json -I -f package.json -e "${vg} = '0.23.0'"`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log(`error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        console.log(`stderr: ${stderr}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
+                });
+                execSync(`git add .`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log(`error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        console.log(`stderr: ${stderr}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
+                });
+                execSync(`git commit -m "package-update"`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log(`error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        console.log(`stderr: ${stderr}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
+                });
+                execSync(`gh pr create --repo ${url} --title "package-update from prakhar" --body " relevent package updated"`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log(`error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        console.log(`stderr: ${stderr}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
+                });                              
             }
             else{
                 obj.update_pr = ""
