@@ -62,7 +62,7 @@ else if(process.argv[2] == "-update"){
                 var a = url.split('/')
                 var b = a[4].split('.')
                 var vg = "this." + `${arr[0]}`
-                execSync(`gh repo fork ${url} --clone=true`, (error, stdout, stderr) => {
+                execSync(`git config --global core.autocrlf input`, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
@@ -73,7 +73,17 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });
-            
+                execSync(`gh repo fork ${url} --clone=true`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log(`error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        console.log(`stderr: ${stderr}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
+                });          
                 execSync(`cd ${b[0]}`, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
