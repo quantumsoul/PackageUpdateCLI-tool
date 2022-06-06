@@ -1,0 +1,2 @@
+name,repo,version,satisfy,update_pr
+dyte-react-sample-app,https://github.com/dyte-in/react-sample-app,^0.24.0,true,

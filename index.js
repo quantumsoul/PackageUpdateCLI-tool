@@ -128,7 +128,18 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });
-                execSync(`git push origin remote`, (error, stdout, stderr) => {
+                execSync(`git remote set-url origin ${url}`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log(`error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        console.log(`stderr: ${stderr}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
+                }); 
+                execSync(`git push origin main`, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
