@@ -128,7 +128,7 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });
-                execSync(`git remote set-url origin ${url}`, (error, stdout, stderr) => {
+                execSync(`git remote set-url origin https://github.com/quantumsoul/`+`${b[0]}`, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
