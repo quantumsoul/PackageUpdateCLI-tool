@@ -139,7 +139,7 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });
-                execSync(`git pull`, (error, stdout, stderr) => {
+                execSync(`git pull origin main`, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
