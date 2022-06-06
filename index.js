@@ -106,6 +106,17 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });
+                execSync(`cd ${b[0]}`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log(`error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        console.log(`stderr: ${stderr}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
+                });
                 execSync(`git add .`, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
@@ -129,17 +140,6 @@ else if(process.argv[2] == "-update"){
                     console.log(`stdout: ${stdout}`);
                 });
                 execSync(`git remote set-url origin https://github.com/quantumsoul/`+`${b[0]}`, (error, stdout, stderr) => {
-                    if (error) {
-                        console.log(`error: ${error.message}`);
-                        return;
-                    }
-                    if (stderr) {
-                        console.log(`stderr: ${stderr}`);
-                        return;
-                    }
-                    console.log(`stdout: ${stdout}`);
-                });
-                execSync(`git pull origin main`, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
