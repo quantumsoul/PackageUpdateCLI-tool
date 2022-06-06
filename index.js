@@ -95,7 +95,7 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });
-                execSync(`json -I -f package.json -e "${vg} = '0.23.0'"`, (error, stdout, stderr) => {
+                execSync(`json -I -f package.json -e "${vg} = '${arr[1]}'"`, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
@@ -138,7 +138,18 @@ else if(process.argv[2] == "-update"){
                         return;
                     }
                     console.log(`stdout: ${stdout}`);
-                }); 
+                });
+                execSync(`git pull`, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log(`error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        console.log(`stderr: ${stderr}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
+                });
                 execSync(`git push origin main`, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
