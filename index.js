@@ -62,6 +62,7 @@ else if(process.argv[2] == "-update"){
                 var a = url.split('/')
                 var b = a[4].split('.')
                 var vg = "this." + `${arr[0]}`
+                var path = 'C:/Users/Acer/Desktop/node-js/dytesdk-cli/' + `${b[0]}`
                 execSync(`git config --global core.autocrlf input`, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
@@ -84,7 +85,7 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });          
-                execSync(`cd ${b[0]}`, (error, stdout, stderr) => {
+                execSync(`json -I -f package.json -e "${vg} = '${arr[1]}'"`,{cwd: path}, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
@@ -95,7 +96,7 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });
-                execSync(`json -I -f package.json -e "${vg} = '${arr[1]}'"`, (error, stdout, stderr) => {
+                execSync(`git add .`,{cwd: path}, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
@@ -106,7 +107,7 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });
-                execSync(`cd ${b[0]}`, (error, stdout, stderr) => {
+                execSync(`git commit -m "package-update"`,{cwd: path}, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
@@ -117,7 +118,7 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });
-                execSync(`git add .`, (error, stdout, stderr) => {
+                execSync(`git remote set-url origin https://github.com/quantumsoul/`+`${b[0]}`,{cwd:path}, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
@@ -128,29 +129,7 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });
-                execSync(`git commit -m "package-update"`, (error, stdout, stderr) => {
-                    if (error) {
-                        console.log(`error: ${error.message}`);
-                        return;
-                    }
-                    if (stderr) {
-                        console.log(`stderr: ${stderr}`);
-                        return;
-                    }
-                    console.log(`stdout: ${stdout}`);
-                });
-                execSync(`git remote set-url origin https://github.com/quantumsoul/`+`${b[0]}`, (error, stdout, stderr) => {
-                    if (error) {
-                        console.log(`error: ${error.message}`);
-                        return;
-                    }
-                    if (stderr) {
-                        console.log(`stderr: ${stderr}`);
-                        return;
-                    }
-                    console.log(`stdout: ${stdout}`);
-                });
-                execSync(`git push origin main`, (error, stdout, stderr) => {
+                execSync(`git push origin main`,{cwd: path}, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
@@ -161,17 +140,7 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });                
-                execSync(`gh pr create --repo ${url} --title "package-update from prakhar" --body " relevent package updated"`, (error, stdout, stderr) => {
-                    if (error) {
-                        console.log(`error: ${error.message}`);
-                        return;
-                    }
-                    if (stderr) {
-                        console.log(`stderr: ${stderr}`);
-                        return;
-                    }
-                    console.log(`stdout: ${stdout}`);
-                });                              
+                obj.update_pr = execSync(`gh pr create --repo ${url} --title "package-update from prakhar" --body " relevent package updated"`,{cwd:path}).toString();                              
             }
             else{
                 obj.update_pr = ""
