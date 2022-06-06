@@ -73,7 +73,7 @@ else if(process.argv[2] == "-update"){
                     }
                     console.log(`stdout: ${stdout}`);
                 });
-                execSync(`gh repo fork ${url} --clone=true`, (error, stdout, stderr) => {
+                execSync(`gh repo fork ${url} --clone=true --remote=true`, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
